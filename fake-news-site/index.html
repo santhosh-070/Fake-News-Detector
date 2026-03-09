@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Hybrid Fake News Detector</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Hybrid Fake News Detection</h1>
+
+<div class="card">
+
+<input id="news" placeholder="Enter news or claim">
+<button onclick="checkNews()">Analyze</button>
+
+<h2 id="ai"></h2>
+<h3 id="fact"></h3>
+<p id="title"></p>
+<a id="link" target="_blank"></a>
+
+</div>
+
+</div>
+
+<script>
+function checkNews(){
+
+let text=document.getElementById("news").value;
+
+fetch("/predict",{
+ method:"POST",
+ headers:{"Content-Type":"application/json"},
+ body:JSON.stringify({news:text})
+})
+.then(res=>res.json())
+.then(data=>{
+
+ document.getElementById("ai").innerHTML =
+ "AI Prediction: "+data.ai_prediction;
+
+ document.getElementById("fact").innerHTML =
+ "Fact Check Result: "+data.fact_check;
+
+ document.getElementById("title").innerHTML =
+ "Claim: "+data.title;
+
+ document.getElementById("link").innerHTML =
+ "Source Link";
+ document.getElementById("link").href=data.link;
+
+});
+}
+</script>
+
+</body>
+</html>
